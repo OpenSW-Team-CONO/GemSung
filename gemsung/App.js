@@ -1,12 +1,10 @@
 import React from 'react';
-import {MapView} from 'expo';
+import MapView from 'react-native-maps';
 
 export default class App extends React.Component {
-  render(){
+  render() {
     return (
-      <MapView
-        style={{flex:1}}
-      />
+      <MapView style={{flex: 1}} />
     );
   }
 }

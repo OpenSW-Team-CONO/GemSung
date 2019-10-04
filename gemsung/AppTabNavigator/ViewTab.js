@@ -1,28 +1,26 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Icon } from 'native-base';
-import Prop from 'prop-types';
 
-export default function ViewTab({photos_loc}) {
+export default class ViewTab extends Component {
+  static navigationOptions = {
+       tabBarIcon: ({ tintColor }) => (
+           <Icon name='ios-person' style={{ color: tintColor }} />
+       )
+   }
+    render() {
+      const { navigation } = this.props;
         return (
+          console.log(JSON.stringify(navigation.getParam('photos_loc'))),
             <View style={style.container}>
-                <Text>View Tab</Text>
+                <Text>{JSON.stringify(navigation.getParam('photos_loc'))}</Text>
             </View>
         );
-}
-
-ViewTab.navigationOptions={
-  tabBarIcon: ({ tintColor }) => (
-      <Icon name='ios-person' style={{ color: tintColor }} />
-  )
-}
-
-ViewTab.Prop={
-  photos_loc : Prop.isRequired
+    }
 }
 
 const style = StyleSheet.create({
-    container: {
+  container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',

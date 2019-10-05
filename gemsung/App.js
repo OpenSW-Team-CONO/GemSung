@@ -1,12 +1,12 @@
-import React from 'react';
-import {MapView} from 'expo';
+import React, { Component } from 'react';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import Main from './Main';
 
-export default class App extends React.Component {
-  render(){
-    return (
-      <MapView
-        style={{flex:1}}
-      />
-    );
+const AppStackNavigator = createStackNavigator({
+  Main:{
+    screen: Main
   }
-}
+});
+
+export default createAppContainer(AppStackNavigator);

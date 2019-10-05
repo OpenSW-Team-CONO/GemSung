@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, View, Button, ScrollView, Image } from 'react-native'
+import { StyleSheet, Text, View,ScrollView, Image } from 'react-native'
+import { Button } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
 import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
@@ -7,7 +8,7 @@ import { Icon } from 'native-base'
 export default class CreateTab extends React.Component {
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
-        <Icon name='ios-home' style={{ color: tintColor }} />
+        <Icon name='aperture' style={{ color: tintColor }} />
     )
   }
 
@@ -16,7 +17,8 @@ export default class CreateTab extends React.Component {
     this.state = {
       imageBrowserOpen: false,
       photos: [],
-      photos_loc:[]
+      photos_loc:[],
+      phtos_uri:[]
     }
   }
 
@@ -33,15 +35,16 @@ export default class CreateTab extends React.Component {
         imageBrowserOpen: false,
         photos,
       })
-      this.state.photos.map((item) => this.renderImage(item.location))
+      this.state.photos.map((item) => this.renderImage(item.location,item.uri))
     }).catch((e) => console.log(e))
   }
 
-  renderImage = async(photos_loc)=>{
+  renderImage = async(photos_loc,photos_uri)=>{
     this.setState({
-      photos_loc
+      photos_loc,
+      photos_uri
     });
-    //console.log(this.state.photos_loc)
+    //console.log(this.state.photos_uri)
     this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
   }
 
@@ -65,6 +68,9 @@ export default class CreateTab extends React.Component {
     return (
       <View style={styles.container}>
         <Button
+          large
+          type='clear'
+          icon={{name:'ios-images',type:'ionicon'}}
           title='새 추억 만들기'
           onPress={() => this.setState({ imageBrowserOpen: true })}
         />

@@ -5,7 +5,7 @@ import { Icon } from 'native-base';
 export default class ViewTab extends Component {
   static navigationOptions = {
        tabBarIcon: ({ tintColor }) => (
-           <Icon name='ios-person' style={{ color: tintColor }} />
+           <Icon name='arrow-dropright-circle' style={{ color: tintColor }} />
        )
    }
     render() {

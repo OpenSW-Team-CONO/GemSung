@@ -5,6 +5,8 @@ import * as Permissions from 'expo-permissions'
 import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
 
+import firebase from 'firebase'
+
 export default class CreateTab extends React.Component {
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
@@ -27,6 +29,16 @@ export default class CreateTab extends React.Component {
       if (status !== 'granted') {
         alert('권한 허용을 해주셔야 어플이 작동해요!');
       }
+    firebase.initializeApp({
+      apiKey: "AIzaSyBHtLuP71PutAwof-Ytde_jC3ZXct5AVhg",
+      authDomain: "the-gemsung.firebaseapp.com",
+      databaseURL: "https://the-gemsung.firebaseio.com",
+      projectId: "the-gemsung",
+      storageBucket: "the-gemsung.appspot.com",
+      messagingSenderId: "2966113910",
+      appId: "1:2966113910:web:db7631062a840ac62b9957",
+      measurementId: "G-H753YWPF3H"
+    });
   }
 
   imageBrowserCallback = (callback) => {
@@ -35,6 +47,7 @@ export default class CreateTab extends React.Component {
         imageBrowserOpen: false,
         photos,
       })
+      //console.log(photos)
       this.state.photos.map((item) => this.renderImage(item.location,item.uri))
     }).catch((e) => console.log(e))
   }
@@ -44,9 +57,23 @@ export default class CreateTab extends React.Component {
       photos_loc,
       photos_uri
     });
-    //console.log(this.state.photos_uri)
+    console.log(photos_uri)
+
+    const repos = await fetch(photos_uri)
+    const blob = await repos.blob()
+    const uploadFilePath = `gemsung_img/${this.uuidv4()}`
+    console.log(`path : ${uploadFilePath}`)
+    let ref = firebase.storage().ref().child(uploadFilePath)
+    return ref.put(blob)
     this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
   }
+
+  uuidv4 = ()=> {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
   render () {
     if (this.state.imageBrowserOpen) {

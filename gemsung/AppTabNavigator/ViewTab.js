@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Icon } from 'native-base';
-import {Alert} from "react-native"
-import MapView from 'react-native-maps';
+import React, { Component } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { Icon } from "native-base";
+import { Alert } from "react-native";
+import MapView from "react-native-maps";
 import * as Location from "expo-location";
-import CreateTab from './CreateTab';
+import CreateTab from "./CreateTab";
 /*
 export default class App extends React.Component {
   state={
@@ -56,58 +56,86 @@ var lat, long;
 
 export default class ViewTab extends Component {
   static navigationOptions = {
-       tabBarIcon: ({ tintColor }) => (
-           <Icon name='arrow-dropright-circle' style={{ color: tintColor }} />
-       )
-   }
-   state={
-     region:{
-       latitude:35,
-       longitude:127,
-       latitudeDelta:0.0922,
-       longitudeDelta:0.0421
-     }
-   }
-   getLocation=async()=>{
-     const { navigation } = this.props;
-     lo=JSON.stringify(navigation.getParam('photos_loc'));
-     if(lo){
-       lat=navigation.state.params.photos_loc.latitude;
-       long=navigation.state.params.photos_loc.longitude;
-       console.log(lat, long);
-       this.setState({
-       region:{
-         latitude:lat,
-         longitude:long,
-         latitudeDelta:0.0922,
-         longitudeDelta:0.0421,
-       }
-     });
-   }
- }
-   onRegionChange=(region)=>{
-     this.setState({region});
-   }
-   componentDidMount(){
-     this.getLocation();
-     console.log(1);
-   }
-    render() {
-      return (
-        <MapView
-          style={{flex: 1}}
-          initialRegion={this.state.region}
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}
-          />
-        );
+    tabBarIcon: ({ tintColor }) => (
+      <Icon name="arrow-dropright-circle" style={{ color: tintColor }} />
+    )
+  };
+  state = {
+    region: {
+      latitude: 35,
+      longitude: 127,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421
+    }
+  };
+  getLocation = async () => {
+    const { navigation } = this.props;
+    lo = JSON.stringify(navigation.getParam("photos_loc"));
+    if (lo) {
+      lat = navigation.state.params.photos_loc.latitude;
+      long = navigation.state.params.photos_loc.longitude;
+      console.log(lat, long);
+      this.setState({
+        region: {
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        }
+      });
+    }
+  };
+  onRegionChange = region => {
+    this.setState({ region });
+  };
+  componentDidMount() {
+    this.getLocation();
+    console.log(1);
+  }
+  render() {
+    return (
+      <ScrollView style={style.container}>
+        <View style={style.videoRow}>
+          <View style={style.videoView}></View>
+        </View>
+        <View style={style.mapRow}>
+          <MapView
+            style={style.mapView}
+            initialRegion={this.state.region}
+            region={this.state.region}
+            onRegionChange={this.onRegionChange}
+          ></MapView>
+        </View>
+        <View style={style.imagesRow}></View>
+      </ScrollView>
+    );
   }
 }
 
 const style = StyleSheet.create({
   container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "black"
+  },
+  videoRow: {
+    height: 200,
+    flexDirection: "row",
+    backgroundColor: "red"
+  },
+  videoView: {
+    flex: 1
+  },
+  mapRow: {
+    height: 300,
+    flexDirection: "row",
+    backgroundColor: "green"
+  },
+  mapView: {
+    flex: 1
+  },
+  imagesRow: {
+    minHeight: 300,
+    backgroundColor: "blue"
+  }
 });

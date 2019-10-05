@@ -5,7 +5,6 @@ import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
 
 export default class CreateTab extends React.Component {
-
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
         <Icon name='ios-home' style={{ color: tintColor }} />
@@ -30,20 +29,20 @@ export default class CreateTab extends React.Component {
 
   imageBrowserCallback = (callback) => {
     callback.then((photos) => {
-      //console.log(photos)
       this.setState({
         imageBrowserOpen: false,
-        photos
+        photos,
       })
-      this.state.photos.map((item) => this.renderImage(item))
+      this.state.photos.map((item) => this.renderImage(item.location))
     }).catch((e) => console.log(e))
   }
 
-  renderImage = async(item)=>{
+  renderImage = async(photos_loc)=>{
     this.setState({
-      photos_loc:item.location
+      photos_loc
     });
-    console.log(this.state.photos_loc)
+    //console.log(this.state.photos_loc)
+    this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
   }
 
   render () {

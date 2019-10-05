@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
+// import Video from 'react-native-video'
+// import { Video } from "react-native-video";
+import { Video } from 'expo-av';
 import { Icon } from "native-base";
 import { Alert } from "react-native";
 import MapView from "react-native-maps";
@@ -96,14 +99,19 @@ export default class ViewTab extends Component {
     return (
       <ScrollView style={style.container}>
         <View style={style.videoRow}>
-          <View style={style.videoView}></View>
+          <Video style={style.videoView}
+          source={{uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'}}
+          shouldPlay
+	        resizeMode="cover"
+          ></Video>
+          <View></View>
         </View>
         <View style={style.mapRow}>
           <MapView
             style={style.mapView}
             initialRegion={this.state.region}
             region={this.state.region}
-            onRegionChange={this.onRegionChange}
+            onRegionChange={this.onRegionChange} 
           ></MapView>
         </View>
         <View style={style.imagesRow}></View>

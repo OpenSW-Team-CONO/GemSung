@@ -36,7 +36,7 @@ const AppTabContainet = createAppContainer(AppTabNavigator);
 
 export default class Main extends Component {
   static navigationOptions = {
-    title: 'Test-Lab',
+    title: 'Gemsung',
      headerTitleStyle: {
         textAlign:"center",
         flex:1

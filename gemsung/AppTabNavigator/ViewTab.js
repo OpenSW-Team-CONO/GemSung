@@ -28,7 +28,7 @@ export default class ViewTab extends Component {
       longitudeDelta: 0.0421
     }
   }
-  onRegionChange=(region)=>{
+  /*onRegionChange=(region)=>{
     for(i=0; i<id; i++){
       this.setState({
         region:{
@@ -39,17 +39,17 @@ export default class ViewTab extends Component {
         }
       });
     }
-  }
+  }*/
 
   render() {
     const {navigation} = this.props;
     lo=JSON.stringify(navigation.getParam('photos_loc'));
-    if(lo){
+    /*if(lo){
       lat[id]=navigation.state.params.photos_loc.latitude;
       long[id]=navigation.state.params.photos_loc.longitude;
       console.log('photos location is :',lat[id], long[id]);
       id++;
-    }
+    }*/
     return (
       <ScrollView style={style.container}>
         <View style={style.videoRow}>
@@ -64,8 +64,8 @@ export default class ViewTab extends Component {
           <MapView
             style={style.mapView}
             initialRegion={this.state.region}
-            region={this.state.region}
-            onRegionChange={this.onRegionChange}
+            //region={this.state.region}
+            //onRegionChange={this.onRegionChange}
           />
         </View>
         <View style={style.imagesRow}></View>

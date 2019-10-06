@@ -69,7 +69,9 @@ export default class ViewTab extends Component {
             //onRegionChange={this.onRegionChange}
           />
         </View>
-        <View style={style.imagesRow}></View>
+        <View style={style.imagesRow}>
+          <Text>현재 준비중...</Text>
+        </View>
       </ScrollView>
     );
   }

@@ -20,7 +20,7 @@ export default class CreateTab extends React.Component {
       imageBrowserOpen: false,
       photos: [],
       photos_loc:[],
-      phtos_uri:[],
+      photos_uri:[],
       fb_uri:[]
     }
   }

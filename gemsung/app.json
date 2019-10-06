@@ -24,9 +24,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.a.b"
     },
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "android": {
+      "package": "com.a.b"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "description": "Team.CONO"
   },
   "displayName": "gemsung",
   "name": "gemsung"

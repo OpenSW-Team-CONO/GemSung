@@ -66,7 +66,6 @@ export default class CreateTab extends React.Component {
     console.log(`path : ${uploadFilePath}`)
     let ref = firebase.storage().ref().child(uploadFilePath)
 
-<<<<<<< Updated upstream
     ref.put(blob)
       .then(file => {
         console.log('file uploaded')
@@ -106,22 +105,6 @@ export default class CreateTab extends React.Component {
    console.log('fb_uri test', this.state.fb_uri)
    firebase.database().ref('/').push(data)
     this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
-=======
-    ref.put(blob).then(file => {
-    console.log('file uploaded')
-    ref.getDownloadURL().then(url => {
-      console.log(`file url ${url}`)
-      this.get_url(url)
-    }).catch(err => {
-      console.error('error file', err)
-    })
-  })
-  .catch(err => {
-    console.log('error while upload file ', err)
-  });
-  console.log(this.state.photos_loc)
-  this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
->>>>>>> Stashed changes
   }
 
   uuidv4 = ()=> {
@@ -137,27 +120,7 @@ get_url=async(fb_uri)=>{
   console.log("fb_uri is : ",this.state.fb_uri)
 }
 
-<<<<<<< Updated upstream
   render () {
-=======
-uploadDB=()=>{
-  console.log(typeof this.state.firebase_uri)
-  const data ={
-    "flag" : 0,
-    "src" : this.state.firebase_uri.map((item, index) => {
-      return {
-        path: item,
-        caption: 'test'
-      }
-    })
-  }
-  console.log('data', data);
-  console.log('firebase_uri test', this.state.firebase_uri);
-  firebase.database().ref('/').push(data)
-}
-
-render () {
->>>>>>> Stashed changes
     if (this.state.imageBrowserOpen) {
       return (
         <ImageBrowser

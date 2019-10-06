@@ -4,7 +4,6 @@ import { Button } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
 import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
-
 import firebase from 'firebase'
 
 export default class CreateTab extends React.Component {
@@ -21,7 +20,7 @@ export default class CreateTab extends React.Component {
       photos: [],
       photos_loc:[],
       photos_uri:[],
-      fb_uri:[]
+      firbase_uri:[]
     }
   }
 
@@ -30,6 +29,7 @@ export default class CreateTab extends React.Component {
       if (status !== 'granted') {
         alert('권한 허용을 해주셔야 어플이 작동해요!');
       }
+
     firebase.initializeApp({
       apiKey: "AIzaSyBHtLuP71PutAwof-Ytde_jC3ZXct5AVhg",
       authDomain: "the-gemsung.firebaseapp.com",
@@ -94,7 +94,7 @@ export default class CreateTab extends React.Component {
    // });
     const data ={
      "flag" : 0,
-     "src" : this.state.fb_uri.filter((item, index) => {
+     "src" : this.state.firbase_uri.filter((item, index) => {
        return {
          path: item,
          caption: 'test'
@@ -102,7 +102,7 @@ export default class CreateTab extends React.Component {
      })
    }
    console.log('data', data);
-   console.log('fb_uri test', this.state.fb_uri)
+   console.log('firebase_uri test', this.state.firbase_uri)
    firebase.database().ref('/').push(data)
     this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
   }
@@ -113,14 +113,14 @@ export default class CreateTab extends React.Component {
     return v.toString(16);
   });
 }
-get_url=async(fb_uri)=>{
+get_url=async(firebase_uri)=>{
   this.setState({
-    fb_uri
+    firebase_uri
   })
-  console.log("fb_uri is : ",this.state.fb_uri)
+  console.log("firebase_uri is : ",this.state.firbase_uri)
 }
 
-  render () {
+render () {
     if (this.state.imageBrowserOpen) {
       return (
         <ImageBrowser
@@ -133,10 +133,9 @@ get_url=async(fb_uri)=>{
         //badgeColor={'#E31676'} // Badge color when picking.
         emptyText={'None'} // Empty Text
         callback={this.imageBrowserCallback} // Callback functinon on press Done or Cancel Button. Argument is Asset Infomartion of the picked images wrapping by the Promise.
-          />
+        />
       )
     }
-
     return (
       <View style={styles.container}>
         <Button

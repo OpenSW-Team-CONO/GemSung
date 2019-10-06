@@ -34,4 +34,8 @@ target 'gemsung' do
 
   use_unimodules!
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
 end

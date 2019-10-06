@@ -1,4 +1,6 @@
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
+include ':react-native-video'
+project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
 include ':react-native-ffmpeg'
 project(':react-native-ffmpeg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-ffmpeg/android')
 include ':react-native-screens'

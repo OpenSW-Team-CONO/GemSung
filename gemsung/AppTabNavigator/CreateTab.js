@@ -9,7 +9,7 @@ import firebase from 'firebase'
 export default class CreateTab extends React.Component {
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
-        <Icon name='aperture' style={{ color: tintColor }} />
+      <Icon name='aperture' style={{ color: tintColor }} />
     )
   }
 
@@ -26,9 +26,9 @@ export default class CreateTab extends React.Component {
 
   async componentDidMount () {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('권한 허용을 해주셔야 어플이 작동해요!');
-      }
+    if (status !== 'granted') {
+      alert('권한 허용을 해주셔야 어플이 작동해요!');
+    }
 
     firebase.initializeApp({
       apiKey: "AIzaSyBHtLuP71PutAwof-Ytde_jC3ZXct5AVhg",
@@ -67,51 +67,52 @@ export default class CreateTab extends React.Component {
     let ref = firebase.storage().ref().child(uploadFilePath)
 
     ref.put(blob).then(file => {
-    console.log('file uploaded')
-    ref.getDownloadURL().then(url => {
-      console.log(`file url ${url}`)
-      this.get_url(url)
-    }).catch(err => {
-      console.error('error file', err)
+      console.log('file uploaded')
+      ref.getDownloadURL().then(url => {
+        console.log(`file url ${url}`)
+        this.get_url(url)
+      }).catch(err => {
+        console.error('error file', err)
+      })
     })
-  })
-  .catch(err => {
-    console.log('error while upload file ', err)
-  });
-  this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
+    .catch(err => {
+      console.log('error while upload file ', err)
+    });
+    console.log('CreateTab photos_loc:', this.state.photos_loc);
+    this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});
   }
 
-uuidv4 = ()=> {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-get_url=async(firebase_uri)=>{
-  this.setState({
-    firebase_uri
-  })
-  console.log("firbase_img_uri is : ",this.state.firebase_uri)
-  this.uploadDB()
-}
-
-uploadDB=()=>{
-  const data ={
-    "flag" : 0,
-    "src" : this.state.firebase_uri.map((item, index) => {
-      return {
-        path: item,
-        caption: 'test'
-      }
-    })
+  uuidv4 = ()=> {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
-  console.log('data', data);
-  console.log('firebase_uri test', this.state.firebase_uri);
-  firebase.database().ref('/').push(data)
-}
 
-render () {
+  get_url=async(firebase_uri)=>{
+    this.setState({
+      firebase_uri
+    })
+    console.log("firbase_img_uri is : ",this.state.firebase_uri)
+    this.uploadDB()
+  }
+
+  uploadDB=()=>{
+    const data ={
+      "flag" : 0,
+      "src" : this.state.firebase_uri.map((item, index) => {
+        return {
+          path: item,
+          caption: 'test'
+        }
+      })
+    }
+    console.log('data', data);
+    console.log('firebase_uri test', this.state.firebase_uri);
+    firebase.database().ref('/').push(data)
+  }
+
+  render () {
     if (this.state.imageBrowserOpen) {
       return (
         <ImageBrowser
@@ -129,13 +130,13 @@ render () {
     }
     return (
       <View style={styles.container}>
-        <Button
-          large
-          type='clear'
-          icon={{name:'ios-images',type:'ionicon'}}
-          title='새 추억 만들기'
-          onPress={() => this.setState({ imageBrowserOpen: true })}
-        />
+      <Button
+      large
+      type='clear'
+      icon={{name:'ios-images',type:'ionicon'}}
+      title='새 추억 만들기'
+      onPress={() => this.setState({ imageBrowserOpen: true })}
+      />
       </View>
     )
   }

@@ -54,8 +54,9 @@ export default class ViewTab extends Component {
       <ScrollView style={style.container}>
         <View style={style.videoRow}>
           <Video style={style.videoView}
-          source={{uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'}}
+          source={{uri: 'https://storage.googleapis.com/the-gemsung.appspot.com/video%2Fgemsung-key.mp4?GoogleAccessId=firebase-adminsdk-ezw2p%40the-gemsung.iam.gserviceaccount.com&Expires=16447017600&Signature=kgQg%2FoeGX02IUBdLp5g4cG0Z5DT9X%2F4NsR7oi0TtfgincnaN2c11g4jMn8lU7vFQXoxOTe1k6QeBjUdOrGwvUI9THxG8w9hiFK6ngDiar%2B4P0ZNWE7Pe3uysNCjA0OmpFqJFakGvUM3qyfpLL2vEG7x7wFmxVOXKuKB23GDhk4W1pePQfsoUB35yWZU87L4UwqSYiXJGGHWYGrPEjr4h%2FP0TsRzA%2FrZM711Lc98kE8UZk3ZEvL3ZEoo4URzqG72rJuzX0%2Fp3iOHaUd2gZ7omn9QqZapB076CSfsZlGZvP6ydJCUB7pwRArUcl4yOpnCJDhGYG7fMW%2FpvRNo6ZZ7aRg%3D%3D'}}
           shouldPlay
+          isLooping
 	        resizeMode="cover"
           ></Video>
           <View></View>
@@ -98,6 +99,6 @@ const style = StyleSheet.create({
   },
   imagesRow: {
     minHeight: 300,
-    backgroundColor: "blue"
+    backgroundColor: "white"
   }
 });

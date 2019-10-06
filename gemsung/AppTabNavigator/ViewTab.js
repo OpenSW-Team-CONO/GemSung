@@ -47,7 +47,7 @@ export default class ViewTab extends Component {
     if(lo){
       lat[id]=navigation.state.params.photos_loc.latitude;
       long[id]=navigation.state.params.photos_loc.longitude;
-      console.log(lat[id], long[id]);
+      //console.log('photos location is :',lat[id], long[id]);
       id++;
     }
     return (

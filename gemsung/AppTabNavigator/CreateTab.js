@@ -42,6 +42,13 @@ export default class CreateTab extends React.Component {
     });
   }
 
+  uuidv4 = ()=> {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
   imageBrowserCallback = (callback) => {
     callback.then((photos) => {
       this.setState({
@@ -58,67 +65,17 @@ export default class CreateTab extends React.Component {
       photos_loc,
       photos_uri
     });
-    console.log(photos_uri)
+    console.log('photos local uri :',photos_uri)
 
     const repos = await fetch(photos_uri)
     const blob = await repos.blob()
     const uploadFilePath = `gemsung_img/${this.uuidv4()}`
-    console.log(`path : ${uploadFilePath}`)
+    console.log(`Firebase img path : ${uploadFilePath}`)
     let ref = firebase.storage().ref().child(uploadFilePath)
-
     ref.put(blob)
-      .then(file => {
-        console.log('file uploaded')
-        ref.getDownloadURL()
-        .then(url => {
-          console.log(`file url ${url}`)
-          this.get_url(url)
-        })
-        .catch(err => {
-          console.error('error file', err)
-        })
-        // file.getDownloadURL()
-        //   .then(url => {
-        //     console.log(`file url ${url}`)
-        //   })
-        //   .catch(err => {
-        //     console.error('error while get file url', err);
-        //   })
-      })
-      .catch(err => {
-        console.log('error while upload file ', err)
-      });
-   //  console.log('file test', file);
-   //  file.getDownloadURL().then((url) => {
-   //     console.log(url);
-   // });
-    const data ={
-     "flag" : 0,
-     "src" : this.state.firbase_uri.filter((item, index) => {
-       return {
-         path: item,
-         caption: 'test'
-       }
-     })
-   }
-   console.log('data', data);
-   console.log('firebase_uri test', this.state.firbase_uri)
-   firebase.database().ref('/').push(data)
+    console.log(ref.url_)
     this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc})
   }
-
-  uuidv4 = ()=> {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-get_url=async(firebase_uri)=>{
-  this.setState({
-    firebase_uri
-  })
-  console.log("firebase_uri is : ",this.state.firbase_uri)
-}
 
 render () {
     if (this.state.imageBrowserOpen) {

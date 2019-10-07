@@ -1,5 +1,6 @@
 # Gemsung
     오픈SW 개발자대회 팀 코노 프로젝트
+|![flow](https://user-images.githubusercontent.com/33346331/66287722-c2987d00-e911-11e9-94dd-c45fbe327bed.jpg)|
 # About Gemsung
     사용자의 핸드폰 갤러리에 담긴 사진 중 원하는 사진들로만 지정하여 하나의 비디오로 생성 
     

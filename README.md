@@ -8,7 +8,7 @@
 # Get Start
     > cd Gemsung
     > npm install
-    > expot start
+    > expo start
 # Open-source libraries
 https://github.com/h2non/videoshow
       

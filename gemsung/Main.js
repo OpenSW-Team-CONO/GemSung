@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import CreateTab from './AppTabNavigator/CreateTab'
 import ViewTab from './AppTabNavigator/ViewTab'
+import Loading from './Loading'
 
 import * as Font from 'expo-font'
 
@@ -40,19 +41,23 @@ const AppTabContainet = createAppContainer(AppTabNavigator);
 
 export default class Main extends Component {
   state={
-    fontLoad : false
+    fontLoad : true
   };
 
-  async componentDidMount() {
+  openFont=async()=>{
     try {
       await Font.loadAsync({
         'title_font': require('./Fonts/jackpot.ttf'),
       });
-      this.setState({fontLoad : true});
-      console.log('폰트 파일을 찾았습니다.')
+      this.setState({fontLoad : false});
+      console.log('폰트 파일을 찾았습니다.',this.state.fontLoad);
     } catch (e) {
-      Alert.alert("폰트 파일을 찾지 못 하였습니다...");
+      Alert.alert("폰트 파일을 찾지 못 하였습니다...",e.stringify());
     }
+  }
+
+  componentDidMount() {
+    this.openFont();
   }
 
   static navigationOptions = {
@@ -61,14 +66,12 @@ export default class Main extends Component {
         textAlign:"center",
         color:'#4C64FF',
         fontSize:30,
-        fontFamily:'title_font',
+        //fontFamily:'title_font',
         flex:1
     },
   }
 
   render() {
-    return (
-      <AppTabContainet />
-    );
+    return this.state.fontLoad? <Loading /> : <AppTabContainet />;
   }
 }

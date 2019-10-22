@@ -12,17 +12,19 @@ export default class CreateTab extends React.Component {
       <Icon name='aperture' style={{ color: tintColor }} />
     )
   }
-
-  constructor (props) {
-    super(props)
-    this.state = {
+  state = {
       imageBrowserOpen: false,
       photos: [],
-      photos_loc:[],
-      photos_uri:[],
-      firebase_uri:[]
+      photos_info:[
+        {
+          id:0,
+          loc:null,
+          uri:null
+        }
+      ],
+      firebase_uri:[],
+      ch : 0
     }
-  }
 
   async componentDidMount () {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -48,19 +50,21 @@ export default class CreateTab extends React.Component {
         imageBrowserOpen: false,
         photos,
       })
-      //console.log(photos)
-      this.state.photos.map((item) => this.renderImage(item.location,item.uri))
+      //console.log(photos);
+      this.state.photos.map((item) => this.sendImage(item.location,item.uri))
     }).catch((e) => console.log(e))
   }
 
-  renderImage = async(photos_loc,photos_uri)=>{
+  sendImage = (photos_loc,photos_uri)=>{
+    const {info} = this.state.photos_info;
     this.setState({
-      photos_loc,
-      photos_uri
+      ch:this.state.ch+1,
+      photos_info:this.state.photos_info.concat({id:this.state.id++,...photos_loc})
     });
-    console.log('photos local uri :',photos_uri)
+    console.log(this.state.ch);
+    console.log('photos info : ',this.state.photos_info);
 
-    const repos = await fetch(photos_uri)
+    /*const repos = await fetch(photos_uri)
     const blob = await repos.blob()
     const uploadFilePath = `gemsung_img/${this.uuidv4()}`
     console.log(`Firebase img path : ${uploadFilePath}`)
@@ -78,8 +82,8 @@ export default class CreateTab extends React.Component {
     .catch(err => {
       console.log('error while upload file ', err)
     });
-    console.log('CreateTab photos_loc:', this.state.photos_loc);
-    this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});
+    console.log('CreateTab photos_loc:', this.state.photos_loc);*/
+    //this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});
   }
 
   uuidv4 = ()=> {
@@ -119,10 +123,10 @@ export default class CreateTab extends React.Component {
         max={30} // Maximum number of pickable image. default is None
         headerCloseText={'취소'} // Close button text on header. default is 'Close'.
         headerDoneText={'만들기'} // Done button text on header. default is 'Done'.
-        //headerButtonColor={'#E31676'} // Button color on header.
+        headerButtonColor={'#4C64FF'} // Button color on header.
         headerSelectText={'선택 되었습니다'} // Word when picking.  default is 'n selected'.
         //mediaSubtype={'default'} // Only iOS, Filter by MediaSubtype. default is display all.
-        //badgeColor={'#E31676'} // Badge color when picking.
+        badgeColor={'#4C64FF'} // Badge color when picking.
         emptyText={'None'} // Empty Text
         callback={this.imageBrowserCallback} // Callback functinon on press Done or Cancel Button. Argument is Asset Infomartion of the picked images wrapping by the Promise.
         />

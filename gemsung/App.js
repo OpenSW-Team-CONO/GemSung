@@ -5,7 +5,7 @@ import Main from './Main';
 
 const AppStackNavigator = createStackNavigator({
   Main:{
-    screen: Main
+    screen: Main // 네비게이션 UI 메인 스크린 지정
   }
 });
 

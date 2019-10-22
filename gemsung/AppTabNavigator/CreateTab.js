@@ -1,3 +1,4 @@
+// 핸드폰 갤러리에서 원하는 사진들을 선택하고 해당 영상으로 제작하는 소스
 import React from 'react'
 import { StyleSheet, Text, View,ScrollView, Image } from 'react-native'
 import { Button } from 'react-native-elements'
@@ -9,30 +10,25 @@ import firebase from 'firebase'
 export default class CreateTab extends React.Component {
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
-      <Icon name='aperture' style={{ color: tintColor }} />
+      <Icon name='aperture' style={{ color: tintColor }} /> // 하단 아이콘 디자인
     )
   }
+
+  id=0 // photos_info 배열 키 값
   state = {
-      imageBrowserOpen: false,
-      photos: [],
-      photos_info:[
-        {
-          id:0,
-          loc:null,
-          uri:null
-        }
-      ],
+      imageBrowserOpen: false, // 이미지 선택 브라우저 출력 여부
+      photos: [], // 선택된 이미지들만 저장하는 배열
+      photos_info:[], // 이미지 좌표와 로컬 uri만 필터하는 배열
       firebase_uri:[],
-      ch : 0
     }
 
   async componentDidMount () {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL); // 갤러리 이용 권한 작업
     if (status !== 'granted') {
       alert('권한 허용을 해주셔야 어플이 작동해요!');
     }
 
-    firebase.initializeApp({
+    firebase.initializeApp({ // 영상 제작에 쓰이는 firebase 설정
       apiKey: "AIzaSyBHtLuP71PutAwof-Ytde_jC3ZXct5AVhg",
       authDomain: "the-gemsung.firebaseapp.com",
       databaseURL: "https://the-gemsung.firebaseio.com",
@@ -51,26 +47,28 @@ export default class CreateTab extends React.Component {
         photos,
       })
       //console.log(photos);
-      this.state.photos.map((item) => this.sendImage(item.location,item.uri))
+      this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터하기 위해 넘긴다
+      this.sendImage(); // firebase 스토리지에 이미지 로컬 uri만 넘긴다
     }).catch((e) => console.log(e))
   }
 
-  sendImage = (photos_loc,photos_uri)=>{
-    const {info} = this.state.photos_info;
+  getImageInfo = (photos_loc,photos_uri)=>{
     this.setState({
-      ch:this.state.ch+1,
-      photos_info:this.state.photos_info.concat({id:this.state.id++,...photos_loc})
+      photos_info:this.state.photos_info.concat({id:this.id++,photos_loc,photos_uri}),
     });
-    console.log(this.state.ch);
-    console.log('photos info : ',this.state.photos_info);
+    //console.log(this.state.photos_info.photos_uri);
+  }
 
-    /*const repos = await fetch(photos_uri)
-    const blob = await repos.blob()
-    const uploadFilePath = `gemsung_img/${this.uuidv4()}`
-    console.log(`Firebase img path : ${uploadFilePath}`)
-    let ref = firebase.storage().ref().child(uploadFilePath)
-
-    ref.put(blob).then(file => {
+  sendImage = async() =>{
+    for (var i = 0; i < this.id; i++) {
+      const repos = await fetch(this.state.photos_info[i].photos_uri)
+      const blob = await repos.blob()
+      const uploadFilePath = `gemsung_img/${this.uuidv4()}`
+      console.log(`Firebase img path : ${uploadFilePath}`)
+      let ref = firebase.storage().ref().child(uploadFilePath)
+      ref.put(blob)
+    }
+    /*ref.put(blob).then(file => {
       console.log('file uploaded')
       ref.getDownloadURL().then(url => {
         console.log(`file url ${url}`)
@@ -82,8 +80,8 @@ export default class CreateTab extends React.Component {
     .catch(err => {
       console.log('error while upload file ', err)
     });
-    console.log('CreateTab photos_loc:', this.state.photos_loc);*/
-    //this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});
+    console.log('CreateTab photos_loc:', this.state.photos_loc);
+    this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});*/
   }
 
   uuidv4 = ()=> {
@@ -120,21 +118,21 @@ export default class CreateTab extends React.Component {
     if (this.state.imageBrowserOpen) {
       return (
         <ImageBrowser
-        max={30} // Maximum number of pickable image. default is None
-        headerCloseText={'취소'} // Close button text on header. default is 'Close'.
-        headerDoneText={'만들기'} // Done button text on header. default is 'Done'.
-        headerButtonColor={'#4C64FF'} // Button color on header.
+        max={30} // 최대 이미지 선택 수 지정
+        headerCloseText={'취소'} // 상단 왼쪽 취소 버튼 디자인
+        headerDoneText={'만들기'} // 상단 오른쪽 만들기 버튼 디자인
+        headerButtonColor={'#4C64FF'} // 버튼 색상 설정
         headerSelectText={'선택 되었습니다'} // Word when picking.  default is 'n selected'.
         //mediaSubtype={'default'} // Only iOS, Filter by MediaSubtype. default is display all.
-        badgeColor={'#4C64FF'} // Badge color when picking.
-        emptyText={'None'} // Empty Text
-        callback={this.imageBrowserCallback} // Callback functinon on press Done or Cancel Button. Argument is Asset Infomartion of the picked images wrapping by the Promise.
+        badgeColor={'#4C64FF'} // 이미지 선택 시 구분을 위한 색상 지정
+        emptyText={'None'} // 백그라운드 텍스트 설정
+        callback={this.imageBrowserCallback} // 콜백 함수로 선택된 이미지들 넘기기
         />
       )
     }
     return (
       <View style={styles.container}>
-      <Button
+      <Button //화면 가운데 텍스트 버튼 디자인
       large
       type='clear'
       icon={{name:'ios-images',type:'ionicon'}}

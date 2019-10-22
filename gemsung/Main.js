@@ -10,11 +10,11 @@ import Loading from './Loading'
 
 import * as Font from 'expo-font'
 
-
 const AppTabNavigator = createMaterialTopTabNavigator({
-  CreateTab: { screen: CreateTab },
-  ViewTab: { screen: ViewTab }
+  CreateTab: { screen: CreateTab }, // 하단 네비게이션 왼쪽 스크린은 CreateTab 으로 설정
+  ViewTab: { screen: ViewTab } // 하단 네비게이션 오른쪽 스크린은 ViewTab 으로 설정
 },{
+  //화면 전환 각종 애니메이션, 색상 등 옵션 설정
   animationEnabled: true,
   swipeEnabled: true,
   tabBarPosition: "bottom",
@@ -29,6 +29,7 @@ const AppTabNavigator = createMaterialTopTabNavigator({
         }
       })
     },
+    pressColor:'#4C64FF',
     activeTintColor: '#000',
     inactiveTintColor: '#d1cece',
     upperCaseLabel: false,
@@ -41,7 +42,7 @@ const AppTabContainet = createAppContainer(AppTabNavigator);
 
 export default class Main extends Component {
   state={
-    fontLoad : true
+    fontLoad : true // 커스텀 폰트 로드 상태 변화 감지
   };
 
   openFont=async()=>{
@@ -50,9 +51,9 @@ export default class Main extends Component {
         'title_font': require('./Fonts/jackpot.ttf'),
       });
       this.setState({fontLoad : false});
-      console.log('폰트 파일을 찾았습니다.',this.state.fontLoad);
+      console.log('폰트 파일을 찾았습니다!',this.state.fontLoad);
     } catch (e) {
-      Alert.alert("폰트 파일을 찾지 못 하였습니다...",e.stringify());
+      Alert.alert("폰트 파일을 찾지 못 하였습니다...",e.stringify()); // 폰트 로드에 실패할 경우 경고창 출력
     }
   }
 
@@ -61,6 +62,7 @@ export default class Main extends Component {
   }
 
   static navigationOptions = {
+    //상단 타이틀 바 옵션 설정
     title: 'Gemsung',
     headerTitleStyle: {
         textAlign:"center",
@@ -72,6 +74,6 @@ export default class Main extends Component {
   }
 
   render() {
-    return this.state.fontLoad? <Loading /> : <AppTabContainet />;
+    return this.state.fontLoad? <Loading /> : <AppTabContainet />; // 폰트가 로드 되는동안 로딩 화면을 출력
   }
 }

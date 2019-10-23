@@ -20,7 +20,7 @@ export default class CreateTab extends React.Component {
       imageBrowserOpen: false, // 이미지 선택 브라우저 출력 여부
       photos: [], // 선택한 이미지들 저장하는 배열
       photos_info:[], // 이미지 좌표와 로컬 uri만 필터하는 배열
-      firebase_uri:[],
+      firebase_uri:[], // firebase DB에 저장할 스토리지 이미지 uri 배열
     }
 
   async componentDidMount () {
@@ -45,12 +45,11 @@ export default class CreateTab extends React.Component {
     callback.then((photos) => {
       this.setState({
         imageBrowserOpen: false,
-        photos,//photos에 이미지 저장
+        photos,//photos에 이미지들 저장
       })
       //console.log(photos);
       this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터해 넘긴다
       this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
-      //this.props.navigation.navigate('ViewTab',{});
     }).catch((e) => console.log(e))
   }
 
@@ -74,6 +73,7 @@ export default class CreateTab extends React.Component {
         ref.getDownloadURL().then(url => { // DB 업로드를 위해 다운로드 가능한 uri 추출
           console.log(`storage file url is ${url}`)
           this.setState({
+            // firebase_uri에 추출한 스토리지 이미지uri 저장
             firebase_uri:this.state.firebase_uri.concat({url})
           })
           //console.log(this.state.firebase_uri)
@@ -95,6 +95,7 @@ export default class CreateTab extends React.Component {
   }
 
   uploadDB=async()=>{
+    // DB에 json 포맷으로 이미지 저장
       let data ={
         "flag" : 0,
         "src" : this.state.firebase_uri.map((item) => {
@@ -106,9 +107,10 @@ export default class CreateTab extends React.Component {
       }
       console.log('Firebase DB data : ', data);
       await firebase.database().ref('gemsung-key/').set(data);
-      await firebase.database().ref('gemsung-key/').update({
-        "flag" : 2
+      await firebase.database().ref('gemsung-key/').update({ // 이미지 저장이 완료되면 영상 재생 트리거 on
+        "flag" : 1
       })
+  this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
   }
 
   render () {

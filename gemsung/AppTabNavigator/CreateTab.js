@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
 import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
+
 import firebase from 'firebase'
 
 export default class CreateTab extends React.Component {
@@ -15,9 +16,10 @@ export default class CreateTab extends React.Component {
   }
 
   id=0 // photos_info 배열 키 값
+  keys=0 // firebase_uri 배일 키 값
   state = {
       imageBrowserOpen: false, // 이미지 선택 브라우저 출력 여부
-      photos: [], // 선택된 이미지들만 저장하는 배열
+      photos: [], // 선택한 이미지들 저장하는 배열
       photos_info:[], // 이미지 좌표와 로컬 uri만 필터하는 배열
       firebase_uri:[],
     }
@@ -44,74 +46,72 @@ export default class CreateTab extends React.Component {
     callback.then((photos) => {
       this.setState({
         imageBrowserOpen: false,
-        photos,
+        photos,//photos에 이미지 저장
       })
       //console.log(photos);
-      this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터하기 위해 넘긴다
-      this.sendImage(); // firebase 스토리지에 이미지 로컬 uri만 넘긴다
+      this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터해 넘긴다
+      this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
+      this.uploadDB(); // firebase DB에 스토리지 uri 전송
+      //this.props.navigation.navigate('ViewTab',{});
     }).catch((e) => console.log(e))
   }
 
   getImageInfo = (photos_loc,photos_uri)=>{
     this.setState({
+      //좌표 그리고 로컬 uri 정보를 photos_info에 저장
       photos_info:this.state.photos_info.concat({id:this.id++,photos_loc,photos_uri}),
     });
     //console.log(this.state.photos_info.photos_uri);
   }
 
   sendImage = async() =>{
-    for (var i = 0; i < this.id; i++) {
+    for (var i = 0; i < this.id; i++) { // 이미지 갯수만큼 스토리지에 저장
       const repos = await fetch(this.state.photos_info[i].photos_uri)
       const blob = await repos.blob()
       const uploadFilePath = `gemsung_img/${this.uuidv4()}`
-      console.log(`Firebase img path : ${uploadFilePath}`)
+      console.log(`Firebase storage img path : ${uploadFilePath}`)
       let ref = firebase.storage().ref().child(uploadFilePath)
-      ref.put(blob)
-    }
-    /*ref.put(blob).then(file => {
-      console.log('file uploaded')
-      ref.getDownloadURL().then(url => {
-        console.log(`file url ${url}`)
-        this.get_url(url)
-      }).catch(err => {
-        console.error('error file', err)
+      ref.put(blob).then(file => {
+        console.log('file uploaded!')
+        ref.getDownloadURL().then(url => { // DB 업로드를 위해 다운로드 가능한 uri 추출
+          console.log(`storage file url is ${url}`)
+          this.setState({
+            firebase_uri:this.state.firebase_uri.concat({keys:this.keys++,url})
+          })
+          //console.log(this.state.firebase_uri)
+        }).catch(err => {
+          console.error('error file', err)
+        })
       })
-    })
-    .catch(err => {
-      console.log('error while upload file ', err)
-    });
-    console.log('CreateTab photos_loc:', this.state.photos_loc);
-    this.props.navigation.navigate('ViewTab',{photos_loc:this.state.photos_loc});*/
+      .catch(err => {
+        console.log('error while upload file ', err)
+      });
+    }
   }
 
-  uuidv4 = ()=> {
+  uuidv4 = ()=> { // 파일명 랜덤 생성
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
 
-  get_url=async(firebase_uri)=>{
-    this.setState({
-      firebase_uri
-    })
-    console.log("firbase_img_uri is : ",this.state.firebase_uri)
-    this.uploadDB()
-  }
-
   uploadDB=()=>{
-    const data ={
+    firebase.database().ref('gemsung-key/').set({
+      test : 'fk this up',
+      lol : 'fk fk fkfkfkfkffkfk'
+    });
+    /*const data ={
       "flag" : 0,
-      "src" : this.state.firebase_uri.map((item, index) => {
+      "src" : this.state.firebase_uri.map((item) => {
         return {
-          path: item,
-          caption: 'test'
+          caption: item.keys,
+          path: item.url,
         }
       })
     }
-    console.log('data', data);
-    console.log('firebase_uri test', this.state.firebase_uri);
-    firebase.database().ref('/').push(data)
+    console.log('Firebase data : ', data);
+    firebase.database().ref('gemsung-key/').push(data)*/
   }
 
   render () {

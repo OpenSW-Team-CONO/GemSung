@@ -16,7 +16,6 @@ export default class CreateTab extends React.Component {
   }
 
   id=0 // photos_info 배열 키 값
-  keys=0 // firebase_uri 배일 키 값
   state = {
       imageBrowserOpen: false, // 이미지 선택 브라우저 출력 여부
       photos: [], // 선택한 이미지들 저장하는 배열
@@ -51,7 +50,6 @@ export default class CreateTab extends React.Component {
       //console.log(photos);
       this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터해 넘긴다
       this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
-      this.uploadDB(); // firebase DB에 스토리지 uri 전송
       //this.props.navigation.navigate('ViewTab',{});
     }).catch((e) => console.log(e))
   }
@@ -71,22 +69,22 @@ export default class CreateTab extends React.Component {
       const uploadFilePath = `gemsung_img/${this.uuidv4()}`
       console.log(`Firebase storage img path : ${uploadFilePath}`)
       let ref = firebase.storage().ref().child(uploadFilePath)
-      ref.put(blob).then(file => {
+      await ref.put(blob).then(file => {
         console.log('file uploaded!')
         ref.getDownloadURL().then(url => { // DB 업로드를 위해 다운로드 가능한 uri 추출
           console.log(`storage file url is ${url}`)
           this.setState({
-            firebase_uri:this.state.firebase_uri.concat({keys:this.keys++,url})
+            firebase_uri:this.state.firebase_uri.concat({url})
           })
           //console.log(this.state.firebase_uri)
         }).catch(err => {
           console.error('error file', err)
         })
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log('error while upload file ', err)
       });
     }
+    this.uploadDB() // firebase DB에 스토리지 uri 전송
   }
 
   uuidv4 = ()=> { // 파일명 랜덤 생성
@@ -96,22 +94,21 @@ export default class CreateTab extends React.Component {
     });
   }
 
-  uploadDB=()=>{
-    firebase.database().ref('gemsung-key/').set({
-      test : 'fk this up',
-      lol : 'fk fk fkfkfkfkffkfk'
-    });
-    /*const data ={
-      "flag" : 0,
-      "src" : this.state.firebase_uri.map((item) => {
-        return {
-          caption: item.keys,
-          path: item.url,
-        }
+  uploadDB=async()=>{
+      let data ={
+        "flag" : 0,
+        "src" : this.state.firebase_uri.map((item) => {
+          return {
+            caption: "test",
+            path: item.url,
+          }
+        })
+      }
+      console.log('Firebase DB data : ', data);
+      await firebase.database().ref('gemsung-key/').set(data);
+      await firebase.database().ref('gemsung-key/').update({
+        "flag" : 2
       })
-    }
-    console.log('Firebase data : ', data);
-    firebase.database().ref('gemsung-key/').push(data)*/
   }
 
   render () {

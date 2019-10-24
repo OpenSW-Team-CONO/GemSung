@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements'
 import * as Permissions from 'expo-permissions'
 import { ImageBrowser } from 'expo-multiple-media-imagepicker'
 import { Icon } from 'native-base'
+import Loading from '../Loading'
 
 import firebase from 'firebase'
 
@@ -17,6 +18,7 @@ export default class CreateTab extends React.Component {
 
   id=0 // photos_info 배열 키 값
   state = {
+      Loadcheck : false, // firebase 그리고 영상 제작시 걸리는 로딩 여부
       imageBrowserOpen: false, // 이미지 선택 브라우저 출력 여부
       photos: [], // 선택한 이미지들 저장하는 배열
       photos_info:[], // 이미지 좌표와 로컬 uri만 필터하는 배열
@@ -45,6 +47,7 @@ export default class CreateTab extends React.Component {
     callback.then((photos) => {
       this.setState({
         imageBrowserOpen: false,
+        Loadcheck : true,
         photos,//photos에 이미지들 저장
       })
       //console.log(photos);
@@ -110,7 +113,10 @@ export default class CreateTab extends React.Component {
       await firebase.database().ref('gemsung-key/').update({ // 이미지 저장이 완료되면 영상 재생 트리거 on
         "flag" : 1
       })
-  this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
+  await this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
+  await this.setState({
+    Loadcheck:false
+  });
   }
 
   render () {
@@ -128,6 +134,10 @@ export default class CreateTab extends React.Component {
         callback={this.imageBrowserCallback} // 콜백 함수로 선택된 이미지들 넘기기
         />
       )
+    }
+    if(this.state.Loadcheck)
+    {
+      return <Loading />
     }
     return (
       <View style={styles.container}>

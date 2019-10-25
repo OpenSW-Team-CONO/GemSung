@@ -61,7 +61,7 @@ export default class CreateTab extends React.Component {
       //좌표 그리고 로컬 uri 정보들만 필터해 photos_info에 저장
       photos_info:this.state.photos_info.concat({photos_loc,photos_uri}),
     });
-    //console.log(this.state.photos_info.photos_uri);
+    console.log(this.state.photos_info);
   }
 
   sendImage = async() =>{
@@ -73,7 +73,7 @@ export default class CreateTab extends React.Component {
       console.log(`Firebase storage img path : ${uploadFilePath}`)
       let ref = firebase.storage().ref().child(uploadFilePath)
       await ref.put(blob).then(file => {
-        console.log('file uploaded to storage!')
+        console.log('file uploaded to storage!'),console.log({i});
         ref.getDownloadURL().then(url => { // DB 업로드를 위해 다운로드 가능한 uri 추출
           console.log(`storage file url is ${url}`)
           this.setState({
@@ -88,6 +88,7 @@ export default class CreateTab extends React.Component {
         console.log('error while upload file ', err)
       });
     }
+    console.log(this.state.photos_info);
     this.uploadDB() // firebase DB에 스토리지 uri 전송
   }
 

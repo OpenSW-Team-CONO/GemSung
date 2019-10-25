@@ -42,7 +42,7 @@ const AppTabContainet = createAppContainer(AppTabNavigator);
 
 export default class Main extends Component {
   state={
-    fontLoad : true // 커스텀 폰트 로드 상태 변화 감지
+    fontLoad : true // 커스텀 폰트 로딩 상태 여부
   };
 
   openFont=async()=>{

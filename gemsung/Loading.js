@@ -5,7 +5,7 @@ export default function Loading() {
   return (
     <View style={styles.container}>
       <ActivityIndicator size = "large" color ="white"/>
-      <Text style={styles.txt}>Wait for Second...</Text>
+      <Text style={styles.txt}>파일 업로드 중...</Text>
     </View>
   );
 }

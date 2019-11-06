@@ -7,6 +7,7 @@ import { Icon } from "native-base";
 import { Alert } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
+import firebase from 'firebase'
 
 var id=0;
 let lo;
@@ -15,6 +16,9 @@ let long=[];
 var i=0;
 
 export default class ViewTab extends Component {
+  state={
+    video_url:null,
+  }
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
       <Icon name="arrow-dropright-circle" style={{ color: tintColor }} />
@@ -40,8 +44,20 @@ export default class ViewTab extends Component {
       });
     }
   }*/
-
   render() {
+    let ref = firebase.database().ref('gemsung-key/urls');
+    ref.on('value', (snapshot) => {
+        console.log("In Value");
+        console.log(snapshot.val());
+        this.setState({video_url:snapshot.val()})
+    });
+    ref.on('value')
+    .then(snapshot => {
+      console.log('value ', snapshot.val())
+    })
+    .catch(e => {
+      console.log('e', e);
+    })
     const {navigation} = this.props;
     lo=JSON.stringify(navigation.getParam('photos_loc'));
     /*if(lo){
@@ -54,7 +70,7 @@ export default class ViewTab extends Component {
       <ScrollView style={style.container}>
         <View style={style.videoRow}>
           <Video style={style.videoView}
-          source={{uri: 'https://storage.googleapis.com/the-gemsung.appspot.com/video%2Fgemsung-key.mp4?GoogleAccessId=firebase-adminsdk-ezw2p%40the-gemsung.iam.gserviceaccount.com&Expires=16447017600&Signature=kgQg%2FoeGX02IUBdLp5g4cG0Z5DT9X%2F4NsR7oi0TtfgincnaN2c11g4jMn8lU7vFQXoxOTe1k6QeBjUdOrGwvUI9THxG8w9hiFK6ngDiar%2B4P0ZNWE7Pe3uysNCjA0OmpFqJFakGvUM3qyfpLL2vEG7x7wFmxVOXKuKB23GDhk4W1pePQfsoUB35yWZU87L4UwqSYiXJGGHWYGrPEjr4h%2FP0TsRzA%2FrZM711Lc98kE8UZk3ZEvL3ZEoo4URzqG72rJuzX0%2Fp3iOHaUd2gZ7omn9QqZapB076CSfsZlGZvP6ydJCUB7pwRArUcl4yOpnCJDhGYG7fMW%2FpvRNo6ZZ7aRg%3D%3D'}}
+          source={{uri: this.state.video_url}}
           shouldPlay
           isLooping
 	        resizeMode="cover"

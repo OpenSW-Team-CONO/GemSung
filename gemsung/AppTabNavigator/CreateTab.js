@@ -61,12 +61,13 @@ export default class CreateTab extends React.Component {
       //좌표 그리고 로컬 uri 정보들만 필터해 photos_info에 저장
       photos_info:this.state.photos_info.concat({photos_loc,photos_uri}),
     });
-    console.log(this.state.photos_info);
+    //console.log(this.state.photos_info);
   }
 
   sendImage = async() =>{
     await console.log(this.state.photos_info.photos_uri);
     for (var i = 0; i < this.state.photos_info.length; i++) { // 이미지 갯수만큼 스토리지에 저장
+      //await this.props.navigation.navigate('ViewTab', {photos_info:this.state.photos_info[i]});
       const repos = await fetch(this.state.photos_info[i].photos_uri)
       const blob = await repos.blob()
       const uploadFilePath = `gemsung_img/${this.uuidv4()}`
@@ -88,8 +89,8 @@ export default class CreateTab extends React.Component {
         console.log('error while upload file ', err)
       });
     }
-    console.log(this.state.photos_info);
-    this.uploadDB() // firebase DB에 스토리지 uri 전송
+    //console.log('CreateTab lo: ', this.state.photos_info);
+    //this.uploadDB() // firebase DB에 스토리지 uri 전송
   }
 
   uuidv4 = ()=> { // 이미지 파일명 랜덤 생성
@@ -110,12 +111,12 @@ export default class CreateTab extends React.Component {
           }
         })
       }
-      console.log('Firebase DB data : ', data);
+      //console.log('Firebase DB data : ', data);
       await firebase.database().ref('gemsung-key/').set(data); // data를 DB에 연속 Input
       await firebase.database().ref('gemsung-key/').update({
         "flag" : 1 // DB 업로드가 완료되면 영상 제작을 위해 플래그 값을 1로 변경
-      })
-  await this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
+      });
+  await this.props.navigation.navigate('ViewTab', {photos_info:this.state.photos_info}); // 모든 작업이 완료되면 ViewTab으로 넘어간다
   await this.setState({
     Loadcheck:false // 로딩 상태 값을 false로 변환
   });

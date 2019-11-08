@@ -7,12 +7,14 @@ import { Icon } from "native-base";
 import { Alert } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
+import CreateTab from './CreateTab.js'
 
 var id=0;
 let lo;
 let lat=[];
 let long=[];
 var i=0;
+let {navigation}={};
 
 export default class ViewTab extends Component {
   static navigationOptions = {
@@ -40,10 +42,14 @@ export default class ViewTab extends Component {
       });
     }
   }*/
+  getData=async()=>{
+    await {navigation}=this.props;
+    //console.log('navigation: ',navigation);
+  }
 
   render() {
-    const {navigation} = this.props;
-    lo=JSON.stringify(navigation.getParam('photos_loc'));
+    //const {navigation} = this.props;
+    //lo=JSON.stringify(navigation.getParam('photos_info'));
     /*if(lo){
       lat[id]=navigation.state.params.photos_loc.latitude;
       long[id]=navigation.state.params.photos_loc.longitude;

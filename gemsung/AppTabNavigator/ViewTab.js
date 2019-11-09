@@ -16,9 +16,9 @@ let long=[];
 var i=0;
 
 export default class ViewTab extends Component {
-  state={
-    video_url:null,
-  }
+  // state={
+  //   video_url:null,
+  // }
   static navigationOptions = {
     tabBarIcon: ({ tintColor }) => (
       <Icon name="arrow-dropright-circle" style={{ color: tintColor }} />
@@ -45,19 +45,19 @@ export default class ViewTab extends Component {
     }
   }*/
   render() {
-    let ref = firebase.database().ref('gemsung-key/urls');
-    ref.on('value', (snapshot) => {
-        console.log("In Value");
-        console.log(snapshot.val());
-        this.setState({video_url:snapshot.val()})
-    });
-    ref.on('value')
-    .then(snapshot => {
-      console.log('value ', snapshot.val())
-    })
-    .catch(e => {
-      console.log('e', e);
-    })
+    // let ref = firebase.database().ref('gemsung-key/urls');
+    // ref.on('value', (snapshot) => {
+    //     console.log("In Value");
+    //     console.log(snapshot.val());
+    //     this.setState({video_url:snapshot.val()})
+    // });
+    // ref.on('value')
+    // .then(snapshot => {
+    //   console.log('value ', snapshot.val())
+    // })
+    // .catch(e => {
+    //   console.log('e', e);
+    // })
     const {navigation} = this.props;
     lo=JSON.stringify(navigation.getParam('photos_loc'));
     /*if(lo){
@@ -70,7 +70,7 @@ export default class ViewTab extends Component {
       <ScrollView style={style.container}>
         <View style={style.videoRow}>
           <Video style={style.videoView}
-          source={{uri: this.state.video_url}}
+          source={{uri: ''}}
           shouldPlay
           isLooping
 	        resizeMode="cover"

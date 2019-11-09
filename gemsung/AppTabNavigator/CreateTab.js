@@ -52,7 +52,7 @@ export default class CreateTab extends React.Component {
       })
       //console.log(photos);
       this.state.photos.map((item) => this.getImageInfo(item.location,item.uri)) // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터해 넘긴다
-      this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
+      //this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
     }).catch((e) => console.log(e))
   }
 

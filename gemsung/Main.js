@@ -9,7 +9,6 @@ import ViewTab from './AppTabNavigator/ViewTab'
 import Loading from './Loading'
 
 import * as Font from 'expo-font'
-// import { Font } from 'expo';
 
 const AppTabNavigator = createMaterialTopTabNavigator({
   CreateTab: { screen: CreateTab }, // 하단 네비게이션 왼쪽 스크린은 CreateTab 으로 설정
@@ -49,7 +48,7 @@ export default class Main extends Component {
   openFont=async()=>{
     try {
       await Font.loadAsync({
-        'title_font': require('./assets/fonts/jackpot.ttf'),
+        title_font: require('./assets/fonts/jackpot.ttf'),
       }).then(() => {
       this.setState({fontLoad : true});
       console.log('폰트 파일을 찾았습니다!',this.state.fontLoad);

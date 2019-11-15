@@ -4,11 +4,11 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import CreateTab from './AppTabNavigator/CreateTab'
-import ViewTab from './AppTabNavigator/ViewTab'
-import Loading from './Loading'
+import CreateTab from './AppTabNavigator/CreateTab';
+import ViewTab from './AppTabNavigator/ViewTab';
+import Loading from './Loading';
 
-import * as Font from 'expo-font'
+import * as Font from 'expo-font';
 
 const AppTabNavigator = createMaterialTopTabNavigator({
   CreateTab: { screen: CreateTab }, // 하단 네비게이션 왼쪽 스크린은 CreateTab 으로 설정

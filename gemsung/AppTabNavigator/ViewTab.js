@@ -7,7 +7,7 @@ import { Icon } from "native-base";
 import { Alert } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 var id=0;
 let lo;

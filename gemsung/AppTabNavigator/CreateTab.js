@@ -1,13 +1,13 @@
 // 핸드폰 갤러리에서 원하는 사진들을 선택하고 해당 영상으로 제작하는 소스
-import React from 'react'
-import { StyleSheet, Text, View,ScrollView, Image } from 'react-native'
-import { Button } from 'react-native-elements'
-import * as Permissions from 'expo-permissions'
-import { ImageBrowser } from 'expo-multiple-media-imagepicker'
-import { Icon } from 'native-base'
-import Loading from '../Loading'
+import React from 'react';
+import { StyleSheet, Text, View,ScrollView, Image } from 'react-native';
+import { Button } from 'react-native-elements';
+import * as Permissions from 'expo-permissions';
+import { ImageBrowser } from 'expo-multiple-media-imagepicker';
+import { Icon } from 'native-base';
+import Loading from '../Loading';
 
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 export default class CreateTab extends React.Component {
   static navigationOptions = {

@@ -1,0 +1,32 @@
+{
+  "ecmaVersion": 8,
+  "libs": [
+    "browser",
+    "react",
+    "jquery"
+  ],
+  "loadEagerly": [
+    "path/to/your/js/**/*.js"
+  ],
+  "dontLoad": [
+    "node_modules/**",
+    "path/to/your/js/**/*.js"
+  ],
+  "plugins": {
+    "es_modules": {},
+    "node": {},
+    "doc_comment": {
+      "fullDocs": true,
+      "strong": true
+    },
+    "complete_strings": {
+      "maxLength": 15
+    },
+    "node_resolve": {},
+    "modules": {
+      "dontLoad": "",
+      "load": "",
+      "modules": ""
+    }
+  }
+}

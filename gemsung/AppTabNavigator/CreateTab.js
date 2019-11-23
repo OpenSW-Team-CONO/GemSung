@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-unused-state */
@@ -24,7 +26,7 @@ export default class CreateTab extends React.Component {
     ),
   }
 
-  id=0 // photos_info 배열 키 값
+  // id=0 // photos_info 배열 키 값
 
   constructor(props) {
     super(props);
@@ -62,19 +64,14 @@ export default class CreateTab extends React.Component {
         Loadcheck: true, // 업로드 및 제작 단계로 로딩 상태 값을 True
         photos, // photos에 이미지들 저장
       });
-      console.log(photos);
-      // this.state.photos.map((item) => this.getImageInfo(item.location, item.uri)); // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터해 넘긴다
+      // id: this.id++;
+      // console.log(photos);
+      // console.log(this.id);
+      this.state.photos.map((img) => this.setState({ photos_info: this.state.photos_info.concat(img.location, img.uri) })); // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터
+      console.log(this.state.photos_info);
       // this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
     }).catch((e) => console.log(e));
   }
-
-  // getImageInfo = async (photos_loc, photos_uri) => {
-  //   await this.setState({
-  //     // 좌표 그리고 로컬 uri 정보들만 필터해 photos_info에 저장
-  //     photos_info: this.state.photos_info.concat({ photos_loc, photos_uri }),
-  //   });
-  //   console.log(this.state.photos_info);
-  // }
 
   // sendImage = async () => {
   //   await console.log(this.state.photos_info.photos_uri);

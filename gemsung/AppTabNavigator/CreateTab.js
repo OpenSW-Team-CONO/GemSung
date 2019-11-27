@@ -1,3 +1,8 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable eqeqeq */
+/* eslint-disable no-bitwise */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable max-len */
 /* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable no-use-before-define */
@@ -67,8 +72,15 @@ export default class CreateTab extends React.Component {
       // id: this.id++;
       // console.log(photos);
       // console.log(this.id);
-      this.state.photos.map((img) => this.setState({ photos_info: this.state.photos_info.concat(img.location, img.uri) })); // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터
-      console.log(this.state.photos_info);
+      // this.state.photos.map((img) => this.setState({ photos_info: this.state.photos_info.concat(img.location, img.uri) })); // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터
+      this.state.photos.map((img) => {
+        console.log('이미지 로컬 주소는 : ', img.uri);
+        const file = new File([''], img.uri);
+        const uploadFilePath = `gemsung_img/${this.uuidv4()}`;
+        const storage = firebase.storage();
+        storage.ref().child(uploadFilePath).put(file);
+      });
+      // console.log(this.state.photos_info);
       // this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
     }).catch((e) => console.log(e));
   }
@@ -101,11 +113,12 @@ export default class CreateTab extends React.Component {
   //   this.uploadDB(); // firebase DB에 스토리지 uri 전송
   // }
 
-  // uuidv4 = () =>  // 이미지 파일명 랜덤 생성
-  //    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-  //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-  //     return v.toString(16);
-  //   })
+  uuidv4 = () => // 이미지 파일명 랜덤 생성
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0; const
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    })
 
   // uploadDB=async () => {
   //   // DB에 json 포맷으로 이미지 저장

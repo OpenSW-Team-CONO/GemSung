@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-plusplus */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-mixed-operators */
 /* eslint-disable eqeqeq */
@@ -60,6 +62,13 @@ export default class CreateTab extends React.Component {
     });
   }
 
+  uuidv4 = () => // 이미지 파일명 랜덤 생성
+    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0; const
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    })
+
   imageBrowserCallback = (callback) => {
     callback.then((photos) => {
       this.setState({
@@ -72,73 +81,53 @@ export default class CreateTab extends React.Component {
       // id: this.id++;
       // console.log(photos);
       // console.log(this.id);
-      // this.state.photos.map((img) => this.setState({ photos_info: this.state.photos_info.concat(img.location, img.uri) })); // 이미지 메타 데이터 중 좌표랑 로컬 uri만 필터
-      this.state.photos.map((img) => {
-        console.log('이미지 로컬 주소는 : ', img.uri);
-        const file = new File([''], img.uri);
-        const uploadFilePath = `gemsung_img/${this.uuidv4()}`;
-        const storage = firebase.storage();
-        storage.ref().child(uploadFilePath).put(file);
-      });
-      // console.log(this.state.photos_info);
-      // this.sendImage(); // firebase 스토리지에 이미지 로컬 uri 전송
+      this.state.photos.map((item) => this.sendImage(item.uri)); // 이미지 로컬 uri 와 firebase stroage에 전송;
+      this.uploadDB();
     }).catch((e) => console.log(e));
   }
 
-  // sendImage = async () => {
-  //   await console.log(this.state.photos_info.photos_uri);
-  //   for (var i = 0; i < this.state.photos_info.length; i++) { // 이미지 갯수만큼 스토리지에 저장
-  //     const repos = await fetch(this.state.photos_info[i].photos_uri);
-  //     const blob = await repos.blob();
-  //     const uploadFilePath = `gemsung_img/${this.uuidv4()}`;
-  //     console.log(`Firebase storage img path : ${uploadFilePath}`);
-  //     const ref = firebase.storage().ref().child(uploadFilePath);
-  //     await ref.put(blob).then(() => {
-  //       console.log('file uploaded to storage!'), console.log({ i });
-  //       ref.getDownloadURL().then((url) => { // DB 업로드를 위해 다운로드 가능한 uri 추출
-  //         console.log(`storage file url is ${url}`);
-  //         this.setState({
-  //           // firebase_uri에 추출한 스토리지 이미지uri 저장
-  //           firebase_uri: this.state.firebase_uri.concat({ url }),
-  //         });
-  //         // console.log(this.state.firebase_uri)
-  //       }).catch((err) => {
-  //         console.error('error file', err);
-  //       });
-  //     }).catch((err) => {
-  //       console.log('error while upload file ', err);
-  //     });
-  //   }
-  //   console.log(this.state.photos_info);
-  //   this.uploadDB(); // firebase DB에 스토리지 uri 전송
-  // }
+  sendImage = async (photos_uri) => {
+    const repos = await fetch(photos_uri);
+    const blob = await repos.blob();
+    const uploadFilePath = await `gemsung_img/${this.uuidv4()}`;
+    const ref = await firebase.storage().ref().child(uploadFilePath);
+    await ref.put(blob).then(() => {
+      console.log('file uploaded to storage!');
+      ref.getDownloadURL().then((url) => { // DB 업로드를 위해 다운로드 가능한 uri 추출
+        console.log(`storage file url is ${url}`);
+        this.setState({
+          // firebase_uri에 추출한 스토리지 이미지uri 저장
+          firebase_uri: this.state.firebase_uri.concat({ url }),
+        });
+        console.log(this.state.firebase_uri);
+      }).catch((err) => {
+        console.error('error file', err);
+      });
+    }).catch((err) => {
+      console.log('error while upload file ', err);
+    });
+    // console.log(this.state.firebase_uri);
+  }
 
-  uuidv4 = () => // 이미지 파일명 랜덤 생성
-    'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = Math.random() * 16 | 0; const
-        v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    })
-
-  // uploadDB=async () => {
-  //   // DB에 json 포맷으로 이미지 저장
-  //   const data = {
-  //     flag: 0, // 이미지 업로드 단계에선 플래그 값은 0
-  //     src: this.state.firebase_uri.map((item) => ({
-  //           caption: "test", // 샘플 캡션 옵션
-  //           path: item.url, // 이미지 경로
-  //         })),
-  //   };
-  //   console.log('Firebase DB data : ', data);
-  //   await firebase.database().ref('gemsung-key/').set(data); // data를 DB에 연속 Input
-  //   await firebase.database().ref('gemsung-key/').update({
-  //     flag: 1, // DB 업로드가 완료되면 영상 제작을 위해 플래그 값을 1로 변경
-  //   });
-  //   await this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
-  //   await this.setState({
-  //     Loadcheck: false, // 로딩 상태 값을 false로 변환
-  //   });
-  // }
+  uploadDB=async () => {
+    // DB에 json 포맷으로 이미지 저장
+    const data = {
+      flag: 0, // 이미지 업로드 단계에선 플래그 값은 0
+      src: this.state.firebase_uri.map((item) => ({
+        caption: 'test', // 샘플 캡션 옵션
+        path: item.url, // 이미지 경로
+      })),
+    };
+    console.log('Firebase DB data : ', data);
+    await firebase.database().ref('gemsung-key/').set(data); // data를 DB에 연속 Input
+    await firebase.database().ref('gemsung-key/').update({
+      flag: 1, // DB 업로드가 완료되면 영상 제작을 위해 플래그 값을 1로 변경
+    });
+    // await this.props.navigation.navigate('ViewTab'); // 모든 작업이 완료되면 ViewTab으로 넘어간다
+    await this.setState({
+      Loadcheck: false, // 로딩 상태 값을 false로 변환
+    });
+  }
 
   render() {
     if (this.state.imageBrowserOpen) { // 추억 만들기 버튼이 눌렸을 떄

@@ -46,32 +46,32 @@ const AppTabNavigator = createMaterialTopTabNavigator({
 const AppTabContainet = createAppContainer(AppTabNavigator);
 
 export default class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fontLoad: false,
-    };
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     fontLoad: false,
+  //   };
+  // }
 
-  openFont=async () => {
-    try {
-      await Font.loadAsync({
-        title_font: require('./assets/fonts/jackpot.ttf'),
-      }).then(() => {
-        this.setState({ fontLoad: true });
-        console.log('폰트 파일을 찾았습니다!', this.state.fontLoad);
-      })
-        .catch((e) => {
-          console.log('error while loading font', e);
-        });
-    } catch (e) {
-      Alert.alert('폰트 파일을 찾지 못 하였습니다...', e.stringify()); // 폰트 로드에 실패할 경우 경고창 출력
-    }
-  }
+  // openFont=async () => {
+  //   try {
+  //     await Font.loadAsync({
+  //       title_font: require('./assets/fonts/jackpot.ttf'),
+  //     }).then(() => {
+  //       this.setState({ fontLoad: true });
+  //       console.log('폰트 파일을 찾았습니다!', this.state.fontLoad);
+  //     })
+  //       .catch((e) => {
+  //         console.log('error while loading font', e);
+  //       });
+  //   } catch (e) {
+  //     Alert.alert('폰트 파일을 찾지 못 하였습니다...', e.stringify()); // 폰트 로드에 실패할 경우 경고창 출력
+  //   }
+  // }
 
-  componentDidMount() {
-    this.openFont();
-  }
+  // componentDidMount() {
+  //   this.openFont();
+  // }
 
   static navigationOptions = {
     // 상단 타이틀 바 옵션 설정
@@ -86,6 +86,6 @@ export default class Main extends Component {
   }
 
   render() {
-    return !this.state.fontLoad ? <Loading /> : <AppTabContainet />; // 폰트가 로드 되는동안 로딩 화면을 출력
+    return <AppTabContainet />; // 폰트가 로드 되는동안 로딩 화면을 출력
   }
 }

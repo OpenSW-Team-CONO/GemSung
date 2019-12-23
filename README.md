@@ -5,6 +5,8 @@
     사용자의 핸드폰 갤러리에 담긴 사진 중 원하는 사진들로만 지정하여 하나의 비디오로 생성 
     
     그리고 사진들의 좌표 메타 데이터를 활용해 지도가 좌표를 따라 다니며 사진에서의 추억 혹은 감성을 추적,자극 하는 크로스 플랫폼 어플 입니다.
+# Prerequisites
+    Node.js v10.16.3    
 # Get Start
     > cd Gemsung
     > npm install
@@ -22,7 +24,7 @@ https://github.com/oblador/react-native-vector-icons
 
     리액트 네이티브 에서 이용 가능한 아이콘 라이브러리
 
-모두 MIT 라이센스를 철칙
+_모두 MIT 라이센스를 철칙_
 # Screenshots
 | 추억 생성 | 비디오 그리고 지도 랜더링 |
 |:-:|:-:|

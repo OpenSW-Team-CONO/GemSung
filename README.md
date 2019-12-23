@@ -17,6 +17,10 @@ https://github.com/h2non/videoshow
 https://github.com/hyakt/expo-multiple-media-imagepicker
 
       핸드폰 갤러리에서 이미지, 비디오 등 지정 타입으로만 여러개 파일들을 고를 수 있게 해주는 라이브러리
+      
+https://github.com/oblador/react-native-vector-icons
+
+    리액트 네이티브 에서 이용 가능한 아이콘 라이브러리
 
 모두 MIT 라이센스를 철칙
 # Screenshots

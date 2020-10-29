@@ -6,7 +6,9 @@
     
     그리고 사진들의 좌표 메타 데이터를 활용해 지도가 좌표를 따라 다니며 사진에서의 추억 혹은 감성을 추적,자극 하는 크로스 플랫폼 어플 입니다.
 # Prerequisites
-    Node.js v10.16.3    
+    Node.js v10.16.3
+    
+    Expo-cli v3.27.8
 # Get Start
     > cd Gemsung
     > npm install
